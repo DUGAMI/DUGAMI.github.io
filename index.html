@@ -178,10 +178,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-08-13 09:04:25 / 修改时间：21:27:22" itemprop="dateCreated datePublished" datetime="2020-08-13T09:04:25+09:00">2020-08-13</time>
+              <time title="创建时间：2020-08-13 09:04:25" itemprop="dateCreated datePublished" datetime="2020-08-13T09:04:25+09:00">2020-08-13</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-08-14 14:59:39" itemprop="dateModified" datetime="2020-08-14T14:59:39+09:00">2020-08-14</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -198,14 +204,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.6k</span>
+              <span>2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -217,7 +223,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="创建你自己的博客"><a href="#创建你自己的博客" class="headerlink" title="创建你自己的博客"></a>创建你自己的博客</h2><h3 id="外观美化"><a href="#外观美化" class="headerlink" title="外观美化"></a>外观美化</h3><h4 id="语言问题"><a href="#语言问题" class="headerlink" title="语言问题"></a>语言问题</h4><p>next本身支持多种语言，只要修改站点配置文件的language属性就可以了。</p>
+          <h2 id="创建你自己的博客"><a href="#创建你自己的博客" class="headerlink" title="创建你自己的博客"></a>创建你自己的博客</h2><h3 id="安装过程"><a href="#安装过程" class="headerlink" title="安装过程"></a>安装过程</h3><h3 id="外观美化"><a href="#外观美化" class="headerlink" title="外观美化"></a>外观美化</h3><h4 id="语言问题"><a href="#语言问题" class="headerlink" title="语言问题"></a>语言问题</h4><p>next本身支持多种语言，只要修改站点配置文件的language属性就可以了。</p>
 <p>在切换语言的地方，Next官方是说将站点配置文件的language设置为zh-Hans就行了，可是我重启server后发现没有变化，重启数次后甚至变成了阿拉伯语…，在网上看到可以修改themes\next\languages里的zh-CN.yml为zh-Hans.yml，原来是语言文件名称没有对应上的问题。  </p>
 <h4 id="头像"><a href="#头像" class="headerlink" title="头像"></a>头像</h4><p>头像的显示默认是方形的，如果想要显示为圆形可以在主题配置文件中设置，把avatar的rounded改为true即可  </p>
 <h4 id="菜单设置"><a href="#菜单设置" class="headerlink" title="菜单设置"></a>菜单设置</h4><p>Next主题默认情况下的菜单只有首页和归档两个选项，标签、分类这样的页面需要你自己去配置文件中设置。首先你需要在<strong>主题配置文件</strong>中找到menu设置，注释说明了该选项的设置语法，可以根据你的需求把相应的菜单项注释去掉，这里我是去掉了about、tags和categories，修改之后应该是下面的样子。</p>
@@ -235,109 +241,10 @@
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-symbols-count-time --save</span><br></pre></td></tr></tbody></table></figure>
 <p>安装完插件后在<strong>主题配置文件</strong>中加入以下代码。  </p>
 <figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">symbols_count_time:</span><br><span class="line">  symbols: true                # 文章字数统计</span><br><span class="line">  time: true                   # 文章阅读时长</span><br><span class="line">  total_symbols: true          # 站点总字数统计</span><br><span class="line">  total_time: true             # 站点总阅读时长</span><br><span class="line">  exclude_codeblock: false     # 排除代码字数统计</span><br></pre></td></tr></tbody></table></figure>
-<p>最后用clean命令和generate命令重新生成页面就可以了。</p>
-<script>
-        document.querySelectorAll('.github-emoji')
-          .forEach(el => {
-            if (!el.dataset.src) { return; }
-            const img = document.createElement('img');
-            img.style = 'display:none !important;';
-            img.src = el.dataset.src;
-            img.addEventListener('error', () => {
-              img.remove();
-              el.style.color = 'inherit';
-              el.style.backgroundImage = 'none';
-              el.style.background = 'none';
-            });
-            img.addEventListener('load', () => {
-              img.remove();
-            });
-            document.body.appendChild(img);
-          });
-      </script>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/12/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="DUGAMI">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="DUGAMI's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/08/12/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-08-12 19:51:46" itemprop="dateCreated datePublished" datetime="2020-08-12T19:51:46+09:00">2020-08-12</time>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>367</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<p>最后用clean命令和generate命令重新生成页面就可以了。  </p>
+<h3 id="博客问题"><a href="#博客问题" class="headerlink" title="博客问题"></a>博客问题</h3><h4 id="插入图片"><a href="#插入图片" class="headerlink" title="插入图片"></a>插入图片</h4><p>在markdown中插入图片不是件简单的事情，你需要准备图片的路径，可以是本地的也可以是网络的，然后在markdown中引用它，问题在于如何管理这些图片，如果把它们放在一个地方比较乱，所以hexo提供了一个插件来简化这件事情，hexo-asset-image，安装方法如下。  </p>
+<pre><code class="shell">npm install https://github.com/CodeFalling/hexo-asset-image --save</code></pre>
+<p>然后把<strong>站点配置文件</strong>中的<code>post_asset_folder</code>设置为<code>true</code>即可。需要注意的是hexo官网在资源文件夹中说明了这一方法，但是它只说明了config文件中的修改，如果没有安装插件直接做了修改的情况下，单独浏览文章时图片是能正常显示的，但是在主页图片无法正常显示，因为在开启<code>post_asset_folder</code>后是用相对路径引用图片。</p>
 <script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
@@ -406,7 +313,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-13 09:01:31" itemprop="dateModified" datetime="2020-08-13T09:01:31+09:00">2020-08-13</time>
+                <time title="修改时间：2020-08-14 15:06:51" itemprop="dateModified" datetime="2020-08-14T15:06:51+09:00">2020-08-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -458,7 +365,7 @@
 <p>最后再说下实际使用过程中的一些坑。似乎是因为Unity本身的引擎架构，比如Unity框架的函数都不是线程安全的，导致Unity代码对多线程的支持不怎么好，协程也是想一定程度代替多线程而有的产物。在实践中我发现在子线程中无法进行实例化一个GameObject和操作它的属性等操作，所以我只能改变一下代码的结构，一个可行的方法是将多线程执行的结果使用变量或者类存储起来，然后用脚本的update函数去读取这些结果。  </p>
 <h3 id="滚动条问题"><a href="#滚动条问题" class="headerlink" title="滚动条问题"></a>滚动条问题</h3><p>在进行聊天时，因为聊天消息很多所以一定会涉及滚动条的操作，但是Unity的原生GUI还是要编写一些代码才能使滚动条的长度响应内容的变化的，这里需要说明一下Unity现在有三套UI系统，一种是引擎原生的UGUI，另一种是有人自己写的框架NGUI，还有一种是在调试中使用的GUI，它需要在OnGUI函数中直接写出UI代码。这里我并没有做深入的探索，因为要让滚动条响应内容变化很简单。  </p>
 <p>简单介绍下Unity原生的滚动部件，你可以在UI部件中看到Scroll View和Scroll bar，其中bar是一个滑动条，是View中的一个部件，通过创建View你可以直接创建有关滑动窗口的一整套组件，如果你更想自定义你的滑动UI，那可以不用这个View，自己搭一个。  </p>
-<p><img src="%3C!--%EF%BF%BC0--%3E/assets/ScrollView.png%7D" alt="image"><br><img src="%3C!--%EF%BF%BC1--%3E/assets/level.png%7D" alt="image"></p>
+<p><img src="/2020/08/01/%E5%8A%A9%E6%89%8B%E6%A8%A1%E5%9D%97/ScrollView.png" alt="image"><br><img src="/2020/08/01/%E5%8A%A9%E6%89%8B%E6%A8%A1%E5%9D%97/level.png" alt="image"></p>
 <p>上图的左边是View组件的外观，右边为View的层次结构。刚建好的View是同时有水平滚动条和垂直滚动条的，需要根据你的需求删除或者通过代码操作。View里面有两个基本部件，ViewPort和ScrollBar，ViewPort是我们的可见区域，它起到了一个mask的作用，起到只展示Content一部分的作用；Scrollbar是滚动条组件，Area我不太明白有什么作用，Handle就是你要拖动的那个条。  </p>
 <p>content里要放你要展示的内容物，在我的应用里我放的是代表对话的一个个Text，在聊天过程中，每次发送消息都会克隆Text，但是只是在Content里加入内容物，滚动条的长度不会响应并发生变化，<strong>关键点是要改变Content的大小</strong>，在每次加入新Text后我会用代码修改Content中Rect Transform组件的Height属性，这样滚动条便会有响应，需要注意的是，Height属性并不能直接改变，你需要访问该组件的sizeDelta属性才能改变它，它是一个二维向量。还有一个小细节是如果你想改变滚动条对鼠标滚轮的敏感程度在Scroll View里有一个Scroll Sensitivity。  </p>
 <script>
@@ -681,7 +588,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
