@@ -155,6 +155,116 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/07/%E8%AE%A1%E7%BB%84%E9%9A%BE%E7%82%B9%E7%AC%AC%E4%BA%8C%E7%AB%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="DUGAMI">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DUGAMI's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/07/%E8%AE%A1%E7%BB%84%E9%9A%BE%E7%82%B9%E7%AC%AC%E4%BA%8C%E7%AB%A0/" class="post-title-link" itemprop="url">计组难点第二章</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-09-07 22:25:03 / 修改时间：22:29:52" itemprop="dateCreated datePublished" datetime="2020-09-07T22:25:03+09:00">2020-09-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" itemprop="url" rel="index"><span itemprop="name">计算机组成原理</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>记录一些我看书时花了一些时间没看懂的地方，防止以后忘了又要重新花时间理解。</p>
+<h3 id="2-指令：计算机的语言"><a href="#2-指令：计算机的语言" class="headerlink" title="2 指令：计算机的语言"></a>2 指令：计算机的语言</h3><h4 id="2-7-决策指令"><a href="#2-7-决策指令" class="headerlink" title="2.7 决策指令"></a>2.7 决策指令</h4><h5 id="2-7-1-循环"><a href="#2-7-1-循环" class="headerlink" title="2.7.1 循环"></a>2.7.1 循环</h5><h6 id="有符号比较和无符号数的对比："><a href="#有符号比较和无符号数的对比：" class="headerlink" title="有符号比较和无符号数的对比："></a>有符号比较和无符号数的对比：</h6><p>书中给了一个两个二进制数比较的例题，用slt指令和sltu指令比较的结果是不一样的，因为这两个指令对符号位的解读不同。答案中说使用sltu指令进行数组越界检查0&lt;=x&lt; y可以节省开销，因为如果x是个负数那么在无符号比较中一定会特别大。否则可能需要使用两条指令进行检查。  </p>
+<figure class="highlight mipsasm"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sltu </span>$<span class="built_in">t0</span>,$<span class="built_in">s1</span>,$<span class="built_in">t2</span> <span class="comment"># $t0=0 if $s1&gt;=length or $s1&lt;0</span></span><br><span class="line"><span class="keyword">beq </span> $<span class="built_in">t0</span>,$<span class="built_in">zero</span>,IndexOutOfBounds <span class="comment">#if bad,goto Error</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="2-8-计算机硬件对过程的支持"><a href="#2-8-计算机硬件对过程的支持" class="headerlink" title="2.8 计算机硬件对过程的支持"></a>2.8 计算机硬件对过程的支持</h4><h6 id="函数调用"><a href="#函数调用" class="headerlink" title="函数调用"></a>函数调用</h6><p>在调用一个函数时需要根据情况判断往栈中压入什么参数。在非递归情况下，书中称为叶过程(leaf procedure)，需要根据函数内新声明的变量数量把$s系列寄存器里的值存到栈里，t系列是不需要的，因为t是temp的。递归情况要存入a系列t系列和ra，a是参数，ra是返回地址。</p>
+<h5 id="2-8-4-在堆中为新数据分配空间"><a href="#2-8-4-在堆中为新数据分配空间" class="headerlink" title="2.8.4 在堆中为新数据分配空间"></a>2.8.4 在堆中为新数据分配空间</h5><h6 id="尾递归"><a href="#尾递归" class="headerlink" title="尾递归"></a>尾递归</h6><p>我不太清楚的是什么样的情况下一个递归代码是可以被归结为尾递归的，我自己大致总结了下，尾递归是编译器对递归函数的一种优化，只要满足一定条件便可以优化为尾递归，我想这个条件应该是在递归过程中不需要在栈中压入额外变量，也就是说在下一层函数向上回溯时不需要进行环境恢复。从形式（代码）上看如果这个递归函数是线状的递归并且在调用自己后没有别的操作就可以优化，像深度优先搜索那样的树状肯定是不行的。  </p>
+<h4 id="2-10-MISP中32位立即数和寻址"><a href="#2-10-MISP中32位立即数和寻址" class="headerlink" title="2.10 MISP中32位立即数和寻址"></a>2.10 MISP中32位立即数和寻址</h4><h5 id="2-10-3-MIPS寻址模式总结"><a href="#2-10-3-MIPS寻址模式总结" class="headerlink" title="2.10.3 MIPS寻址模式总结"></a>2.10.3 MIPS寻址模式总结</h5><h6 id="寻址模式的疑惑"><a href="#寻址模式的疑惑" class="headerlink" title="寻址模式的疑惑"></a>寻址模式的疑惑</h6><p>在这一小节中作者总结了几种寻址模式，不过我开始没能理解它们的意思，第一个是立即数寻址，我开始以为立即数寻址是用立即数作为地址找到内存中的内容，实际上这是直接寻址的工作方式，所谓立即数寻址是直接把立即数放到指令里，所以没必要寻址；还有寄存器寻址就是操作数在寄存器里面。后面几种寻址方式好理解一点，XX寻址就是靠XX手段获取操作数，比如基址寻址就是通过基址+偏移的方式找到操作数。  </p>
+<h4 id="2-11-并行与指令：同步"><a href="#2-11-并行与指令：同步" class="headerlink" title="2.11 并行与指令：同步"></a>2.11 并行与指令：同步</h4><p>书不讲人话，先跳过了…  </p>
+<h4 id="2-12-翻译并执行程序"><a href="#2-12-翻译并执行程序" class="headerlink" title="2.12 翻译并执行程序"></a>2.12 翻译并执行程序</h4><p>原来动态链接库是C语言规范的一部分… 我之前一直以为这个是windows系统独有的文件。  </p>
+<h5 id="2-12-2-链接器"><a href="#2-12-2-链接器" class="headerlink" title="2.12.2 链接器"></a>2.12.2 链接器</h5><p>关于程序的编译过程我是一直有个疑问的，为什么不能先链接再编译呢，一般流程是把各个代码块进行编译后再链接，这个操作倒过来行不行。经过思（上网）考（查）后我知道了如果先链接则会出现的改了一行代码后所有代码要重新编译的问题，这很浪费计算资源，把代码分开编译，只修改了其中一个代码块，那么就单独重新编译那一块。  </p>
+<p>另外我们平时在写代码时调用的库函数实际上已经都是编译好封装进dll文件里的，比如大家都熟悉的stdio.h，链接的作用就是把你的经过编译后的汇编代码和那些库文件的汇编代码链接起来最后形成可执行文件，所以链接器能让你把一些常用代码比如api库先编译好，之后方便使用。</p>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/07/%E4%BA%BA%E7%89%A9%E8%A7%86%E7%BA%BF%E9%9A%8F%E9%BC%A0%E6%A0%87%E7%A7%BB%E5%8A%A8%E6%8E%A2%E7%A9%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -180,7 +290,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-09-07 22:08:58 / 修改时间：22:15:14" itemprop="dateCreated datePublished" datetime="2020-09-07T22:08:58+09:00">2020-09-07</time>
+              <time title="创建时间：2020-09-07 22:08:58 / 修改时间：22:32:08" itemprop="dateCreated datePublished" datetime="2020-09-07T22:08:58+09:00">2020-09-07</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -198,14 +308,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.7k</span>
+              <span>1.5k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>1 分钟</span>
             </span>
 
         </div>
@@ -229,18 +339,6 @@
     {
         head = this.GetComponent&lt;Transform&gt;();
     }
-
-    void Update()
-    {
-        Ray ray=camera.ScreenPointToRay(Input.mousePosition);
-
-        //Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow);
-
-        Vector3 relativePos = ray.origin - head.position;
-
-        head.localEulerAngles = new Vector3(relativePos.x*200, 0, relativePos.y*50);
-
-    }
 }</code></pre>
 <p>我在代码中用的是localEulerAngles，这里先说明一下什么是EulerAngles，使用这种方式设置的角度是非增量形式的，你设置多少就是多少，如果你想使用增量方式设置角度就应该用Transform的Rotate方法。再解释local，local的意义是相对，所以local欧拉角的设置是相对于父物体的，这里其实应该用非local的版本，但是我不知道怎么设置的最后成功了，所以请读者们不要效仿我的代码🐶</p>
 <h4 id="Blend-Tree"><a href="#Blend-Tree" class="headerlink" title="Blend-Tree"></a>Blend-Tree</h4><p>Blend-Tree是Unity设计的一种将动画混合起来的机制，你可以通过一个或两个参数控制每个单独的动画在最终动画中的一个权重，多用于混合步行和跑步等相似的动作。由于我只是简单探索下这个功能，所以就记录下使用过程中的一些细节。  </p>
@@ -249,19 +347,6 @@
 <p><img src="/2020/09/07/%E4%BA%BA%E7%89%A9%E8%A7%86%E7%BA%BF%E9%9A%8F%E9%BC%A0%E6%A0%87%E7%A7%BB%E5%8A%A8%E6%8E%A2%E7%A9%B6/BlendTree.png" alt="image"></p>
 <p>选择二维混合方式后会出现右边类似雷达图的东西，中心的红点代表你现在的两个参数组成的坐标，两个蓝点分别代表我导入的两个动作。在Blend Tree运行过程中，参数会根据游戏的输入进行变动，在我的例子里就是根据鼠标的坐标进行变动，所以红点也会发生变动，如果红点进入了蓝点的作用范围，那么相应蓝点的动作就会在混合动作中占高的权重。  </p>
 <p>但是我最终发现这个功能和我想要实现的效果不太一样。最大的问题就是我录制的动画是不停的播放的，也就是说它会不停的摇头，我想实现的效果头部跟随鼠标移动，这需要让Blend Tree里的参数控制还要准确控制动画播放到了第几秒，所以这方法有根本上的问题。但本着探索的精神我还是记录下来我对混合树的理解。</p>
-<h4 id="IK系统"><a href="#IK系统" class="headerlink" title="IK系统"></a>IK系统</h4><p>最终破案，使用IK系统是这个功能比较好的选择，我之前走了太多弯路了。简单介绍下IK，IK是Inverse Kinematic反向动力学的缩写，与FK相反，IK是子物体带动父物体，说人话就是你移动模型的手等末端模块，胳膊也会跟着移动。在我这个例子里，利用IK可以直接让头部旋转，那么为什么IK系统知道头部在哪呢，实际上这是unity的IK的特别之处。</p>
-<p>unity的IK系统是基于Humanoid模型的，非Humanoid模型无法使用，这一点可以看下<a target="_blank" rel="noopener" href="https://forum.unity.com/threads/ik-with-non-humanoid-animations.361152/">unity论坛</a>(3L)里的讨论。由于Humanoid模型在创建过程中Unity会对真实的骨骼进行抽象，简单来说就是把头、胳膊、腿等部位和真实的骨骼进行映射，所以Humannoid模型是很简单的，这种特性让动画变得可重用了，在一个模型上设计的动画可以迁移到另一模型上，对于我这种不懂建模动画的来说是很爽了，更详细的说明可以参考这个<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_38239050/article/details/79720472">网址</a>。正是因为IK是基于Humanoid的，所以IK自然知道头在哪个地方，你只要调用相应的函数就行了。</p>
-<p>头部的旋转可以用以下几行代码很简单的实现。</p>
-<pre><code class="Csharp"> void OnAnimatorIK(int layerIndex)
-    {
-        animator.SetLookAtPosition(ray.origin);
-        animator.SetLookAtWeight(1);  
-    }</code></pre>
-<p>注意要让OnAnimatorIK调用需要先让脚本绑定对应的模型，然后打开脚本绑定模型的动画控制器中的IK Pass，如图  </p>
-<p><img src="/2020/09/07/%E4%BA%BA%E7%89%A9%E8%A7%86%E7%BA%BF%E9%9A%8F%E9%BC%A0%E6%A0%87%E7%A7%BB%E5%8A%A8%E6%8E%A2%E7%A9%B6/IkPass.png" alt="image">  </p>
-<p><code>SetLookAtPosition</code>设定了头的方向，除此之外还需要使用另一个方法<code>SetLookAtWeight</code>，该方法设置的是IK会多大程度干涉正在运行的动画，也就是IK运动的权重。  </p>
-<pre><code class="Csharp">public void SetLookAtWeight(float weight, float bodyWeight = 0.0f, float headWeight = 1.0f, float eyesWeight = 0.0f, float clampWeight = 0.5f);</code></pre>
-<p>weight表示全局参数，是后面所有参数的系数。后面的body、head、eys分别代表身体各部位参与LookAt过程的权重，如果你想让头部旋转的过程让身体也稍微跟着动一动，那么你就可以把body的权重调高一些。最后一个参数我还不太明白它的作用，关于IK更详细的说明参考这个<a target="_blank" rel="noopener" href="https://blog.csdn.net/zhenghongzhi6/article/details/82851617">博客</a>。</p>
 <script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
@@ -840,20 +925,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
