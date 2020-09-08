@@ -180,7 +180,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-09-08 14:41:19 / 修改时间：14:42:01" itemprop="dateCreated datePublished" datetime="2020-09-08T14:41:19+09:00">2020-09-08</time>
+              <time title="创建时间：2020-09-08 14:41:19 / 修改时间：20:16:35" itemprop="dateCreated datePublished" datetime="2020-09-08T14:41:19+09:00">2020-09-08</time>
             </span>
 
           <br>
@@ -211,67 +211,17 @@
           <h2 id="动画问题"><a href="#动画问题" class="headerlink" title="动画问题"></a>动画问题</h2><p>我想要在untiy里实现人物的头跟随鼠标移动的一种功能，但是我是头一次接触有关人体模型的一些操作，所以感觉走了很多弯路。我最开始想到的办法就是用脚本直接控制头的transform组件，将鼠标的坐标用一定方式映射为头的角度参数，但是这种方法的问题是无法和人物的动画结合起来；另外一个办法是使用Blend-tree，它可以将不同的动画混合起来，真正开始做起来的时候发现这个思路好像有问题…  </p>
 <h4 id="控制transform"><a href="#控制transform" class="headerlink" title="控制transform"></a>控制transform</h4><p>这个思路是很好想到的，主要需要解决的问题有两个，如何将鼠标的坐标转换为3D空间中的坐标和头部的角度控制问题。  </p>
 <p>开始觉得直接获取鼠标的坐标就可以了，但是让人物的头的方向对着鼠标并不是需要平面坐标系的坐标，所以我需要一个把鼠标坐标转换为空间坐标系的函数，然后我发现Camera对象有一个方法叫<code>ScreenPointToRay</code>通过传入鼠标的坐标可以得到一条视景体的近平面(Near Clip Plane)到远平面(Far Clip Plane)的一个Ray对象，而我们需要的主要是是这个射线的射出点的坐标，在场景中摄像头是直接对着人物模型的，所以最后让模型的头部转向射线的原点即可。  </p>
-<pre><code class="Csharp">public class EyeMove : MonoBehaviour
-{
-    public Camera camera;
-    public Transform head;
+<figure class="highlight csharp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">EyeMove</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">{</span><br><span class="line">    <span class="keyword">public</span> Camera camera;</span><br><span class="line">    <span class="keyword">public</span> Transform head;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Start</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    {</span><br><span class="line">        head = <span class="keyword">this</span>.GetComponent&lt;Transform&gt;();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Update</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>    {</span><br><span class="line">        Ray ray=camera.ScreenPointToRay(Input.mousePosition);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow);</span></span><br><span class="line"></span><br><span class="line">        Vector3 relativePos = ray.origin - head.position;</span><br><span class="line">  </span><br><span class="line">        head.localEulerAngles = <span class="keyword">new</span> Vector3(relativePos.x*<span class="number">200</span>, <span class="number">0</span>, relativePos.y*<span class="number">50</span>);</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
-    void Start()
-    {
-        head = this.GetComponent&lt;Transform&gt;();
-    }
-
-    void Update()
-    {
-        Ray ray=camera.ScreenPointToRay(Input.mousePosition);
-
-        //Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow);
-
-        Vector3 relativePos = ray.origin - head.position;
-
-        head.localEulerAngles = new Vector3(relativePos.x*200, 0, relativePos.y*50);
-
-    }
-}</code></pre>
-<p>我在代码中用的是localEulerAngles，这里先说明一下什么是EulerAngles，使用这种方式设置的角度是非增量形式的，你设置多少就是多少，如果你想使用增量方式设置角度就应该用Transform的Rotate方法。再解释local，local的意义是相对，所以local欧拉角的设置是相对于父物体的，这里其实应该用非local的版本，但是我不知道怎么设置的最后成功了，所以请读者们不要效仿我的代码::dog face::。</p>
-<h4 id="Blend-Tree"><a href="#Blend-Tree" class="headerlink" title="Blend-Tree"></a>Blend-Tree</h4><p>Blend-Tree是Unity设计的一种将动画混合起来的机制，你可以通过一个或两个参数控制每个单独的动画在最终动画中的一个权重，多用于混合步行和跑步等相似的动作。由于我只是简单探索下这个功能，所以就记录下使用过程中的一些细节。  </p>
-<p>首先你需要在Animator controller里右键点击<code>Create State</code>-&gt;<code>From New Blend Tree</code>，然后点击新出现的BlendTree进入BlendTree界面。  </p>
-<p>点击中间的Blend Tree，然后在unity右边的Inspector页面可以看到有一个Motion列表，你需要在那里给Blend Tree添加动作，Blend Type决定了你用几个参数控制动作的混合以及参数的精度。参数的添加和给普通的动画控制器添加参数是一样的。在完成一系列操作后如下图。</p>
-<p><img src="/2020/09/08/%E4%BA%BA%E7%89%A9%E8%A7%86%E7%BA%BF%E9%9A%8F%E9%BC%A0%E6%A0%87%E7%A7%BB%E5%8A%A8%E6%8E%A2%E7%A9%B6/Users/DUGAMI/Desktop/BlendTree.png" alt="image"></p>
-<p>选择二维混合方式后会出现右边类似雷达图的东西，中心的红点代表你现在的两个参数组成的坐标，两个蓝点分别代表我导入的两个动作。在Blend Tree运行过程中，参数会根据游戏的输入进行变动，在我的例子里就是根据鼠标的坐标进行变动，所以红点也会发生变动，如果红点进入了蓝点的作用范围，那么相应蓝点的动作就会在混合动作中占高的权重。  </p>
-<p>但是我最终发现这个功能和我想要实现的效果不太一样。最大的问题就是我录制的动画是不停的播放的，也就是说它会不停的摇头，我想实现的效果头部跟随鼠标移动，这需要让Blend Tree里的参数控制还要准确控制动画播放到了第几秒，所以这方法有根本上的问题。但本着探索的精神我还是记录下来我对混合树的理解。</p>
-<h4 id="IK系统"><a href="#IK系统" class="headerlink" title="IK系统"></a>IK系统</h4><p>最终破案，使用IK系统是这个功能比较好的选择，我之前走了太多弯路了。简单介绍下IK，IK是Inverse Kinematic反向动力学的缩写，与FK相反，IK是子物体带动父物体，说人话就是你移动模型的手等末端模块，胳膊也会跟着移动。在我这个例子里，利用IK可以直接让头部旋转，那么为什么IK系统知道头部在哪呢，实际上这是unity的IK的特别之处。</p>
-<p>unity的IK系统是基于Humanoid模型的，非Humanoid模型无法使用，这一点可以看下<a target="_blank" rel="noopener" href="https://forum.unity.com/threads/ik-with-non-humanoid-animations.361152/">unity论坛</a>(3L)里的讨论。由于Humanoid模型在创建过程中Unity会对真实的骨骼进行抽象，简单来说就是把头、胳膊、腿等部位和真实的骨骼进行映射，所以Humannoid模型是很简单的，这种特性让动画变得可重用了，在一个模型上设计的动画可以迁移到另一模型上，对于我这种不懂建模动画的来说是很爽了，更详细的说明可以参考这个<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_38239050/article/details/79720472">网址</a>。正是因为IK是基于Humanoid的，所以IK自然知道头在哪个地方，你只要调用相应的函数就行了。</p>
-<p>头部的旋转可以用以下几行代码很简单的实现。</p>
-<pre><code class="Csharp"> void OnAnimatorIK(int layerIndex)
-    {
-        animator.SetLookAtPosition(ray.origin);
-        animator.SetLookAtWeight(1);  
-    }</code></pre>
-<p>注意要让OnAnimatorIK调用需要先让脚本绑定对应的模型，然后打开脚本绑定模型的动画控制器中的IK Pass，如图  </p>
-<p><img src="/2020/09/08/%E4%BA%BA%E7%89%A9%E8%A7%86%E7%BA%BF%E9%9A%8F%E9%BC%A0%E6%A0%87%E7%A7%BB%E5%8A%A8%E6%8E%A2%E7%A9%B6/Users/DUGAMI/Desktop/IkPass.png" alt="image">  </p>
-<p><code>SetLookAtPosition</code>设定了头的方向，除此之外还需要使用另一个方法<code>SetLookAtWeight</code>，该方法设置的是IK会多大程度干涉正在运行的动画，也就是IK运动的权重。  </p>
-<pre><code class="Csharp">public void SetLookAtWeight(float weight, float bodyWeight = 0.0f, float headWeight = 1.0f, float eyesWeight = 0.0f, float clampWeight = 0.5f);</code></pre>
-<p>weight表示全局参数，是后面所有参数的系数。后面的body、head、eys分别代表身体各部位参与LookAt过程的权重，如果你想让头部旋转的过程让身体也稍微跟着动一动，那么你就可以把body的权重调高一些。最后一个参数我还不太明白它的作用，关于IK更详细的说明参考这个<a target="_blank" rel="noopener" href="https://blog.csdn.net/zhenghongzhi6/article/details/82851617">博客</a>。</p>
-<script>
-        document.querySelectorAll('.github-emoji')
-          .forEach(el => {
-            if (!el.dataset.src) { return; }
-            const img = document.createElement('img');
-            img.style = 'display:none !important;';
-            img.src = el.dataset.src;
-            img.addEventListener('error', () => {
-              img.remove();
-              el.style.color = 'inherit';
-              el.style.backgroundImage = 'none';
-              el.style.background = 'none';
-            });
-            img.addEventListener('load', () => {
-              img.remove();
-            });
-            document.body.appendChild(img);
-          });
-      </script>
+<p>我在代码中用的是localEulerAngles，这里先说明一下什么是EulerAngles，使用这种方式设置的角度是非增量形式的，你设置多少就是多少，如果你想使用增量方式设置角度就应该用Transform的Rotate方法。再解释local，local的意义是相对，所以local欧拉角的设置是相对于父物体的，这里其实应该用非local的版本，但是我不知道怎么设置的最后成功了，所以请读者们不要效仿我的代码🐶。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/09/08/%E4%BA%BA%E7%89%A9%E8%A7%86%E7%BA%BF%E9%9A%8F%E9%BC%A0%E6%A0%87%E7%A7%BB%E5%8A%A8%E6%8E%A2%E7%A9%B6/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -313,10 +263,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-09-07 22:25:03 / 修改时间：22:42:07" itemprop="dateCreated datePublished" datetime="2020-09-07T22:25:03+09:00">2020-09-07</time>
+              <time title="创建时间：2020-09-07 22:25:03" itemprop="dateCreated datePublished" datetime="2020-09-07T22:25:03+09:00">2020-09-07</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-09-08 14:44:46" itemprop="dateModified" datetime="2020-09-08T14:44:46+09:00">2020-09-08</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -431,7 +387,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-09-07 22:14:08" itemprop="dateModified" datetime="2020-09-07T22:14:08+09:00">2020-09-07</time>
+                <time title="修改时间：2020-09-08 20:19:46" itemprop="dateModified" datetime="2020-09-08T20:19:46+09:00">2020-09-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -449,7 +405,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>195</span>
+              <span>178</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -468,7 +424,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="Jetbrain-License更新"><a href="#Jetbrain-License更新" class="headerlink" title="Jetbrain License更新"></a>Jetbrain License更新</h2><p>我的jetbrain证书已经失效了很久，上个学期比较忙没有时间搭理它，有应急时刻都是直接在网上找到别人的激活代码上一贴，不过一般一两个小时就失效了…，今天感觉不能这样了，所以就认真查了一下怎么重新激活证书。  </p>
+          <p>我的jetbrain证书已经失效了很久，上个学期比较忙没有时间搭理它，有应急时刻都是直接在网上找到别人的激活代码上一贴，不过一般一两个小时就失效了…，今天感觉不能这样了，所以就认真查了一下怎么重新激活证书。  </p>
 <p>然后我发现你可以在这个<a target="_blank" rel="noopener" href="https://www.jetbrains.com/zh-cn/community/education/#students">网站</a>上申请证书，没错，只要你是学生就可以申请了，貌似只要是.edu.cn后缀的邮箱它都认。所以以后不要搞什么破解了<span class="github-emoji" style="color: transparent;background:no-repeat url(https://github.githubassets.com/images/icons/emoji/unicode/1f604.png?v8) center/contain" data-src="https://github.githubassets.com/images/icons/emoji/unicode/1f604.png?v8">😄</span></p>
 <p><img src="/2020/08/15/jetbrain%20License%E6%9B%B4%E6%96%B0/jetbrain.png" alt="image">  </p>
 <script>
@@ -539,7 +495,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-14 14:59:39" itemprop="dateModified" datetime="2020-08-14T14:59:39+09:00">2020-08-14</time>
+                <time title="修改时间：2020-09-08 20:18:09" itemprop="dateModified" datetime="2020-09-08T20:18:09+09:00">2020-09-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -576,47 +532,20 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="创建你自己的博客"><a href="#创建你自己的博客" class="headerlink" title="创建你自己的博客"></a>创建你自己的博客</h2><h3 id="安装过程"><a href="#安装过程" class="headerlink" title="安装过程"></a>安装过程</h3><h3 id="外观美化"><a href="#外观美化" class="headerlink" title="外观美化"></a>外观美化</h3><h4 id="语言问题"><a href="#语言问题" class="headerlink" title="语言问题"></a>语言问题</h4><p>next本身支持多种语言，只要修改站点配置文件的language属性就可以了。</p>
+          <h3 id="安装过程"><a href="#安装过程" class="headerlink" title="安装过程"></a>安装过程</h3><p>安装的时候忘记截图了，以后再写哈…</p>
+<h3 id="外观美化"><a href="#外观美化" class="headerlink" title="外观美化"></a>外观美化</h3><h4 id="语言问题"><a href="#语言问题" class="headerlink" title="语言问题"></a>语言问题</h4><p>next本身支持多种语言，只要修改站点配置文件的language属性就可以了。</p>
 <p>在切换语言的地方，Next官方是说将站点配置文件的language设置为zh-Hans就行了，可是我重启server后发现没有变化，重启数次后甚至变成了阿拉伯语…，在网上看到可以修改themes\next\languages里的zh-CN.yml为zh-Hans.yml，原来是语言文件名称没有对应上的问题。  </p>
 <h4 id="头像"><a href="#头像" class="headerlink" title="头像"></a>头像</h4><p>头像的显示默认是方形的，如果想要显示为圆形可以在主题配置文件中设置，把avatar的rounded改为true即可  </p>
 <h4 id="菜单设置"><a href="#菜单设置" class="headerlink" title="菜单设置"></a>菜单设置</h4><p>Next主题默认情况下的菜单只有首页和归档两个选项，标签、分类这样的页面需要你自己去配置文件中设置。首先你需要在<strong>主题配置文件</strong>中找到menu设置，注释说明了该选项的设置语法，可以根据你的需求把相应的菜单项注释去掉，这里我是去掉了about、tags和categories，修改之后应该是下面的样子。</p>
 <figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">home: / || fa fa-home</span><br><span class="line">about: /about/ || fa fa-user</span><br><span class="line">tags: /tags/ || fa fa-tags</span><br><span class="line">categories: /categories/ || fa fa-th</span><br><span class="line">archives: /archives/ || fa fa-archive</span><br></pre></td></tr></tbody></table></figure>
-<p>然而想要看到相应的页面还需要其他的修改，上面的步骤只是让主页显示菜单项，并且设置了页面的路径，但是你还没有实际创建页面，所以你需要使用一下命令新建页面。</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo new page "about"</span><br><span class="line">hexo new page "tags"</span><br><span class="line">hexo new page "categories"</span><br></pre></td></tr></tbody></table></figure>
-<p>经过上面的操作我们创建了3个page类型的页面，最后我们需要到对应的index.md中为文件头添加type信息，只要加上type:”title”即可。执行完以上操作之后就可以在博客中浏览你的新加入的页面了。  </p>
-<p>这里再简单说明下标签和分类的设置方法，在每篇文章的文件头，hexo称它为Front-matter，可以设置文章的标签和分类属性，在Hexo中，标签是可以有多个的，但是分类只能有一个，具体的设置方法如下。</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">categories: Diary</span><br><span class="line">tags:</span><br><span class="line">- PS3</span><br><span class="line">- Games</span><br></pre></td></tr></tbody></table></figure>
-<p>在设置单个标签时可以像分类属性一样直接写分类名，注意：的后面需要有空格。  </p>
-<p>关于页面的编写方式随意，你可以用markdown的方式编写或者把页面类型设置为page，这样就可以用HTML代码修改页面，我想网上应该有线程的模板，但是我没特意去找（没啥好写的）</p>
-<h4 id="代码外观"><a href="#代码外观" class="headerlink" title="代码外观"></a>代码外观</h4><p>因为整体页面是白色的，所以想把代码主题换成夜间的来让代码更醒目一些，代码主题的设置在<strong>主题配置文件</strong>的highlight_theme中，注释提供了数种主题风格，我选择的是night bright  </p>
-<h4 id="社交链接"><a href="#社交链接" class="headerlink" title="社交链接"></a>社交链接</h4><p>所谓社交链接就是在你的个人信息旁边的超链，可以链到github页面、Instagram等，我开始不知道叫这个名字找了好一会，你可以在<strong>主题配置文件</strong>的social选项里找到它，把对应注释去掉换成你的链接即可。  </p>
-<h4 id="字数统计"><a href="#字数统计" class="headerlink" title="字数统计"></a>字数统计</h4><p>字数统计功能其实没啥用，就是看着比较nb，这个功能需要额外安装一个插件。  </p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-symbols-count-time --save</span><br></pre></td></tr></tbody></table></figure>
-<p>安装完插件后在<strong>主题配置文件</strong>中加入以下代码。  </p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">symbols_count_time:</span><br><span class="line">  symbols: true                # 文章字数统计</span><br><span class="line">  time: true                   # 文章阅读时长</span><br><span class="line">  total_symbols: true          # 站点总字数统计</span><br><span class="line">  total_time: true             # 站点总阅读时长</span><br><span class="line">  exclude_codeblock: false     # 排除代码字数统计</span><br></pre></td></tr></tbody></table></figure>
-<p>最后用clean命令和generate命令重新生成页面就可以了。  </p>
-<h3 id="博客问题"><a href="#博客问题" class="headerlink" title="博客问题"></a>博客问题</h3><h4 id="插入图片"><a href="#插入图片" class="headerlink" title="插入图片"></a>插入图片</h4><p>在markdown中插入图片不是件简单的事情，你需要准备图片的路径，可以是本地的也可以是网络的，然后在markdown中引用它，问题在于如何管理这些图片，如果把它们放在一个地方比较乱，所以hexo提供了一个插件来简化这件事情，hexo-asset-image，安装方法如下。  </p>
-<pre><code class="shell">npm install https://github.com/CodeFalling/hexo-asset-image --save</code></pre>
-<p>然后把<strong>站点配置文件</strong>中的<code>post_asset_folder</code>设置为<code>true</code>即可。需要注意的是hexo官网在资源文件夹中说明了这一方法，但是它只说明了config文件中的修改，如果没有安装插件直接做了修改的情况下，单独浏览文章时图片是能正常显示的，但是在主页图片无法正常显示，因为在开启<code>post_asset_folder</code>后是用相对路径引用图片。</p>
-<script>
-        document.querySelectorAll('.github-emoji')
-          .forEach(el => {
-            if (!el.dataset.src) { return; }
-            const img = document.createElement('img');
-            img.style = 'display:none !important;';
-            img.src = el.dataset.src;
-            img.addEventListener('error', () => {
-              img.remove();
-              el.style.color = 'inherit';
-              el.style.backgroundImage = 'none';
-              el.style.background = 'none';
-            });
-            img.addEventListener('load', () => {
-              img.remove();
-            });
-            document.body.appendChild(img);
-          });
-      </script>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/08/13/%E5%88%9B%E5%BB%BA%E4%BD%A0%E7%9A%84%E5%8D%9A%E5%AE%A2/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -649,7 +578,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/08/01/%E5%8A%A9%E6%89%8B%E6%A8%A1%E5%9D%97/" class="post-title-link" itemprop="url">助手模块</a>
+            <a href="/2020/08/01/%E5%8A%A9%E6%89%8B%E6%A8%A1%E5%9D%97/" class="post-title-link" itemprop="url">开发unity程序过程中遇到的一些问题</a>
         </h2>
 
         <div class="post-meta">
@@ -666,7 +595,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-14 15:06:51" itemprop="dateModified" datetime="2020-08-14T15:06:51+09:00">2020-08-14</time>
+                <time title="修改时间：2020-09-08 20:21:59" itemprop="dateModified" datetime="2020-09-08T20:21:59+09:00">2020-09-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -703,43 +632,20 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="助手模块"><a href="#助手模块" class="headerlink" title="助手模块"></a>助手模块</h1><h3 id="C-的json解析"><a href="#C-的json解析" class="headerlink" title="C#的json解析"></a>C#的json解析</h3><p>经过调研，Newtonsoft是一个比较简单好用的库吧，但是C#可比python处理字典复杂多了，以为它不原生支持字典类型，读取还算好，修改起来真是麻烦，不过这样也让性能提高了不少。  </p>
+          <h3 id="C-的json解析"><a href="#C-的json解析" class="headerlink" title="C#的json解析"></a>C#的json解析</h3><p>经过调研，Newtonsoft是一个比较简单好用的库吧，但是C#可比python处理字典复杂多了，以为它不原生支持字典类型，读取还算好，修改起来真是麻烦，不过这样也让性能提高了不少。  </p>
 <h4 id="创建实体类"><a href="#创建实体类" class="headerlink" title="创建实体类"></a>创建实体类</h4><p>遇到了一个问题… 如果json数据是多层的怎么转化为C#类呢？还是有别的解决方法吗，在网上查到的方法是如果有嵌套的成分，那么自然嵌套的子项得是个类，所以有两层嵌套就要有两个类，如果有n层嵌套就有n个类。如果里面有json数组，那么应该用List类型建立实体类中的变量。</p>
 <p>下面是例子，<a target="_blank" rel="noopener" href="https://www.cnblogs.com/zchzt/p/9466769.html">原地址在这里</a></p>
 <figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">{</span><br><span class="line">    <span class="attr">"dog"</span>:[</span><br><span class="line">        {<span class="attr">"name"</span>:<span class="string">"Rufus"</span>,<span class="attr">"breed"</span>:<span class="string">"labrador"</span>,<span class="attr">"count"</span>:<span class="number">1</span>,<span class="attr">"twoFeet"</span>:<span class="literal">false</span>},</span><br><span class="line">        {<span class="attr">"name"</span>:<span class="string">"Marty"</span>,<span class="attr">"breed"</span>:<span class="string">"whippet"</span>,<span class="attr">"count"</span>:<span class="number">1</span>,<span class="attr">"twoFeet"</span>:<span class="literal">false</span>}</span><br><span class="line">    ]</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
 <figure class="highlight csharp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">DogItem</span></span><br><span class="line">{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> name { <span class="keyword">get</span>; <span class="keyword">set</span>; }</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> breed { <span class="keyword">get</span>; <span class="keyword">set</span>; }</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> count { <span class="keyword">get</span>; <span class="keyword">set</span>; }</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> twoFeet { <span class="keyword">get</span>; <span class="keyword">set</span>; }</span><br><span class="line">}</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Root</span></span><br><span class="line">{</span><br><span class="line">    <span class="keyword">public</span> List &lt;DogItem &gt; dog { <span class="keyword">get</span>; <span class="keyword">set</span>; }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="网络阻塞问题"><a href="#网络阻塞问题" class="headerlink" title="网络阻塞问题"></a>网络阻塞问题</h3><p>在unity进行网络操作时，一般会涉及IO问题，比如发送一个Http请求，按照http协议的规定，发送完后还会有一个response包，所以在等待的过程中，程序会一直卡在这个操作上，从游戏的角度来看，整个游戏会卡住，给用户带来极其糟糕的体验。我通过调查，得知了两个或许解决这个问题的方案，协程和多线程。</p>
-<p>这两个方案都可以产生有多个线程的效果，<strong>实际上都是假的多线程</strong>，它们频繁的切换主线程和子线程来达到并行执行的假象，为了达到这种假象，主线程和子线程的操作都会被割裂成很多块，而它们区别便可以在这里看出来，多线程的操作是在系统层面分片的，也就是说，它破坏了代码的原子性，玩不好会出现问题；而协程则是在更大粒度上上的分片，这个分片粒度是用户可以自己操作的；还有一点需要注意的是协程如果堵塞，那么主线程也会堵塞，所以我们的网络IO问题是不能用协程的，不过我还没有搞懂什么时候使用协程,但是可以确定的是，多线程可以用在需要复杂算法、逻辑处理、IO处理的地方。关于协程的资料可以看下这些资料。<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Roz-001/p/11205700.html">Unity C#笔记 协程详解</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/59619632">从各种点理解Unity中的协程</a></p>
-<p>关于C#的多线程用法是很简单的，这里贴一下实例代码。  </p>
-<figure class="highlight csharp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Threading;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">MultithreadingApplication</span></span><br><span class="line">{</span><br><span class="line">    <span class="keyword">class</span> <span class="title">ThreadCreationProgram</span></span><br><span class="line">    {</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">childThread</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>        {</span><br><span class="line">            Console.WriteLine(<span class="string">"Child thread starts"</span>);</span><br><span class="line">        }</span><br><span class="line">       </span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="keyword">string</span>[] args</span>)</span></span><br><span class="line"><span class="function"></span>        {</span><br><span class="line">            ThreadStart childref = <span class="keyword">new</span> ThreadStart(CallToChildThread);</span><br><span class="line">            Console.WriteLine(<span class="string">"In Main: Creating the Child thread"</span>);</span><br><span class="line">            Thread childThread = <span class="keyword">new</span> Thread(childref);</span><br><span class="line">            childThread.Start();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>在上面这段代码中，childThread是要在子线程执行的函数，我们可以通过利用该函数作为参数构造ThreadStart，然后还需要再包装一层Thread，最后使用Start函数便可以启动线程。在代码中被线程执行的函数是静态的，然而我测试了下非静态函数也是可以被包装的。  </p>
-<p>最后再说下实际使用过程中的一些坑。似乎是因为Unity本身的引擎架构，比如Unity框架的函数都不是线程安全的，导致Unity代码对多线程的支持不怎么好，协程也是想一定程度代替多线程而有的产物。在实践中我发现在子线程中无法进行实例化一个GameObject和操作它的属性等操作，所以我只能改变一下代码的结构，一个可行的方法是将多线程执行的结果使用变量或者类存储起来，然后用脚本的update函数去读取这些结果。  </p>
-<h3 id="滚动条问题"><a href="#滚动条问题" class="headerlink" title="滚动条问题"></a>滚动条问题</h3><p>在进行聊天时，因为聊天消息很多所以一定会涉及滚动条的操作，但是Unity的原生GUI还是要编写一些代码才能使滚动条的长度响应内容的变化的，这里需要说明一下Unity现在有三套UI系统，一种是引擎原生的UGUI，另一种是有人自己写的框架NGUI，还有一种是在调试中使用的GUI，它需要在OnGUI函数中直接写出UI代码。这里我并没有做深入的探索，因为要让滚动条响应内容变化很简单。  </p>
-<p>简单介绍下Unity原生的滚动部件，你可以在UI部件中看到Scroll View和Scroll bar，其中bar是一个滑动条，是View中的一个部件，通过创建View你可以直接创建有关滑动窗口的一整套组件，如果你更想自定义你的滑动UI，那可以不用这个View，自己搭一个。  </p>
-<p><img src="/2020/08/01/%E5%8A%A9%E6%89%8B%E6%A8%A1%E5%9D%97/ScrollView.png" alt="image"><br><img src="/2020/08/01/%E5%8A%A9%E6%89%8B%E6%A8%A1%E5%9D%97/level.png" alt="image"></p>
-<p>上图的左边是View组件的外观，右边为View的层次结构。刚建好的View是同时有水平滚动条和垂直滚动条的，需要根据你的需求删除或者通过代码操作。View里面有两个基本部件，ViewPort和ScrollBar，ViewPort是我们的可见区域，它起到了一个mask的作用，起到只展示Content一部分的作用；Scrollbar是滚动条组件，Area我不太明白有什么作用，Handle就是你要拖动的那个条。  </p>
-<p>content里要放你要展示的内容物，在我的应用里我放的是代表对话的一个个Text，在聊天过程中，每次发送消息都会克隆Text，但是只是在Content里加入内容物，滚动条的长度不会响应并发生变化，<strong>关键点是要改变Content的大小</strong>，在每次加入新Text后我会用代码修改Content中Rect Transform组件的Height属性，这样滚动条便会有响应，需要注意的是，Height属性并不能直接改变，你需要访问该组件的sizeDelta属性才能改变它，它是一个二维向量。还有一个小细节是如果你想改变滚动条对鼠标滚轮的敏感程度在Scroll View里有一个Scroll Sensitivity。  </p>
-<script>
-        document.querySelectorAll('.github-emoji')
-          .forEach(el => {
-            if (!el.dataset.src) { return; }
-            const img = document.createElement('img');
-            img.style = 'display:none !important;';
-            img.src = el.dataset.src;
-            img.addEventListener('error', () => {
-              img.remove();
-              el.style.color = 'inherit';
-              el.style.backgroundImage = 'none';
-              el.style.background = 'none';
-            });
-            img.addEventListener('load', () => {
-              img.remove();
-            });
-            document.body.appendChild(img);
-          });
-      </script>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/08/01/%E5%8A%A9%E6%89%8B%E6%A8%A1%E5%9D%97/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -772,7 +678,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/07/28/Unity%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">Unity开发笔记</a>
+            <a href="/2020/07/28/Unity%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">Unity调试技巧</a>
         </h2>
 
         <div class="post-meta">
@@ -789,7 +695,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-13 09:01:32" itemprop="dateModified" datetime="2020-08-13T09:01:32+09:00">2020-08-13</time>
+                <time title="修改时间：2020-09-08 20:22:35" itemprop="dateModified" datetime="2020-09-08T20:22:35+09:00">2020-09-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -807,7 +713,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.4k</span>
+              <span>1.3k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -826,7 +732,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Unity开发笔记"><a href="#Unity开发笔记" class="headerlink" title="Unity开发笔记"></a>Unity开发笔记</h1><h3 id="调试技巧"><a href="#调试技巧" class="headerlink" title="调试技巧"></a>调试技巧</h3><h4 id="附加到Unity"><a href="#附加到Unity" class="headerlink" title="附加到Unity"></a>附加到Unity</h4><p>开始开发的时候没有调试功能还可以接受，但是等到程序规模变大了之后不能调试真的是很难受了，除了下面说的单元测试外还有一种方式可以在运行过程中调试，这种方式就是我们在打开VS时总能看见的附加到进程。简单介绍下该功能，附加到进程是一种调试方案，你在VS里打开的代码可能只是主程序的一个dll代码，而这种方式可以让你在主程序运行时打一个断点去调试那些dll代码。  </p>
+          <h3 id="调试技巧"><a href="#调试技巧" class="headerlink" title="调试技巧"></a>调试技巧</h3><h4 id="附加到Unity"><a href="#附加到Unity" class="headerlink" title="附加到Unity"></a>附加到Unity</h4><p>开始开发的时候没有调试功能还可以接受，但是等到程序规模变大了之后不能调试真的是很难受了，除了下面说的单元测试外还有一种方式可以在运行过程中调试，这种方式就是我们在打开VS时总能看见的附加到进程。简单介绍下该功能，附加到进程是一种调试方案，你在VS里打开的代码可能只是主程序的一个dll代码，而这种方式可以让你在主程序运行时打一个断点去调试那些dll代码。  </p>
 <p>在Unity里主程序是你的游戏，你在播放时游戏便运行了。你可以在你的脚本里打上断点，然后在游戏执行相关的操作便可以开始调试，这种方法一般是主程序是个大程序，无法频繁编译，或者你没有主程序的代码，它在别的机器上。  </p>
 <p>一开始我的VS里没有附加到Unity，所以我当时缺了Visual Studio Tools for Unity，你需要在VS的关于窗口里进行VS的更新，更新时注意把Unity编辑器的勾打掉，因为你已经安装了。安装后重启Unity和VS便可看到“附加到Unity”选项。</p>
 <h4 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h4><p>在untiy中使用单元测试的一个原因是，VS本身不支持直接调试unity代码，所以你无法执行这些脚本代码。但是使用单元测试，你可以以程序的最小单元，去执行测试，在这里呢，最小单元是指函数，你可以针对一个函数创建一个单元测试，然后就可以运行那个函数的代码了。</p>
