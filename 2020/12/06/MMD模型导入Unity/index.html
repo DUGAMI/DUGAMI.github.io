@@ -20,23 +20,25 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="我的jetbrain证书已经失效了很久，上个学期比较忙没有时间搭理它，有应急时刻都是直接在网上找到别人的激活代码上一贴，不过一般一两个小时就失效了…，今天感觉不能这样了，所以就认真查了一下怎么重新激活证书。   然后我发现你可以在这个网站上申请证书，没错，只要你是学生就可以申请了，貌似只要是.edu.cn后缀的邮箱它都认。所以以后不要搞什么破解了😄             document.qu">
+  <meta name="description" content="MMD模型导入Unity好一段时间没有更新过博客了，并不是忙，最近因为疫情原因在国外被关了一年，人生地不熟，快憋出抑郁症了，干什么都没动力，希望这种情况能赶快过去吧。 众所周知，MMD模型是pmx格式的，然而Unity却不直接支持这种格式，我找到了两种方法将MMD模型导入到Unity中，一种是使用Unity插件进行自动转化，还有一种较麻烦需要使用blender进行中介来转换。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="jetbrain License更新">
-<meta property="og:url" content="http://yoursite.com/2020/08/15/jetbrain%20License%E6%9B%B4%E6%96%B0/index.html">
+<meta property="og:title" content="MMD模型导入Unity">
+<meta property="og:url" content="http://yoursite.com/2020/12/06/MMD%E6%A8%A1%E5%9E%8B%E5%AF%BC%E5%85%A5Unity/index.html">
 <meta property="og:site_name" content="DUGAMI&#39;s blog">
-<meta property="og:description" content="我的jetbrain证书已经失效了很久，上个学期比较忙没有时间搭理它，有应急时刻都是直接在网上找到别人的激活代码上一贴，不过一般一两个小时就失效了…，今天感觉不能这样了，所以就认真查了一下怎么重新激活证书。   然后我发现你可以在这个网站上申请证书，没错，只要你是学生就可以申请了，貌似只要是.edu.cn后缀的邮箱它都认。所以以后不要搞什么破解了😄             document.qu">
+<meta property="og:description" content="MMD模型导入Unity好一段时间没有更新过博客了，并不是忙，最近因为疫情原因在国外被关了一年，人生地不熟，快憋出抑郁症了，干什么都没动力，希望这种情况能赶快过去吧。 众所周知，MMD模型是pmx格式的，然而Unity却不直接支持这种格式，我找到了两种方法将MMD模型导入到Unity中，一种是使用Unity插件进行自动转化，还有一种较麻烦需要使用blender进行中介来转换。">
 <meta property="og:locale">
-<meta property="og:image" content="http://yoursite.com/2020/08/15/jetbrain%20License%E6%9B%B4%E6%96%B0/jetbrain.png">
-<meta property="article:published_time" content="2020-08-15T10:34:45.000Z">
-<meta property="article:modified_time" content="2020-09-08T11:19:46.498Z">
+<meta property="og:image" content="http://yoursite.com/2020/12/06/MMD%E6%A8%A1%E5%9E%8B%E5%AF%BC%E5%85%A5Unity/MMD%E6%8F%92%E4%BB%B6%E7%BD%91%E5%9D%80.png">
+<meta property="og:image" content="http://yoursite.com/2020/12/06/MMD%E6%A8%A1%E5%9E%8B%E5%AF%BC%E5%85%A5Unity/MMD%E6%8F%92%E4%BB%B6%E8%BD%AC%E5%8C%96.png">
+<meta property="og:image" content="http://yoursite.com/2020/12/06/MMD%E6%A8%A1%E5%9E%8B%E5%AF%BC%E5%85%A5Unity/MMD%E6%8F%92%E4%BB%B6%E8%BD%AC%E5%8C%96%E7%95%8C%E9%9D%A2.png">
+<meta property="og:image" content="http://yoursite.com/2020/12/06/MMD%E6%A8%A1%E5%9E%8B%E5%AF%BC%E5%85%A5Unity/MMD%E6%8F%92%E4%BB%B6%E5%8A%A8%E7%94%BB.png">
+<meta property="article:published_time" content="2020-12-06T04:58:47.000Z">
+<meta property="article:modified_time" content="2020-12-06T05:07:46.079Z">
 <meta property="article:author" content="DUGAMI">
-<meta property="article:tag" content="IDE">
-<meta property="article:tag" content="JetBrain">
+<meta property="article:tag" content="Unity">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2020/08/15/jetbrain%20License%E6%9B%B4%E6%96%B0/jetbrain.png">
+<meta name="twitter:image" content="http://yoursite.com/2020/12/06/MMD%E6%A8%A1%E5%9E%8B%E5%AF%BC%E5%85%A5Unity/MMD%E6%8F%92%E4%BB%B6%E7%BD%91%E5%9D%80.png">
 
-<link rel="canonical" href="http://yoursite.com/2020/08/15/jetbrain%20License%E6%9B%B4%E6%96%B0/">
+<link rel="canonical" href="http://yoursite.com/2020/12/06/MMD%E6%A8%A1%E5%9E%8B%E5%AF%BC%E5%85%A5Unity/">
 
 
 <script id="page-configurations">
@@ -49,7 +51,7 @@
   };
 </script>
 
-  <title>jetbrain License更新 | DUGAMI's blog</title>
+  <title>MMD模型导入Unity | DUGAMI's blog</title>
   
 
 
@@ -164,7 +166,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/15/jetbrain%20License%E6%9B%B4%E6%96%B0/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/12/06/MMD%E6%A8%A1%E5%9E%8B%E5%AF%BC%E5%85%A5Unity/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -177,7 +179,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          jetbrain License更新
+          MMD模型导入Unity
         </h1>
 
         <div class="post-meta">
@@ -186,23 +188,17 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-08-15 19:34:45" itemprop="dateCreated datePublished" datetime="2020-08-15T19:34:45+09:00">2020-08-15</time>
+              <time title="创建时间：2020-12-06 13:58:47 / 修改时间：14:07:46" itemprop="dateCreated datePublished" datetime="2020-12-06T13:58:47+09:00">2020-12-06</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-09-08 20:19:46" itemprop="dateModified" datetime="2020-09-08T20:19:46+09:00">2020-09-08</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%9D%82/" itemprop="url" rel="index"><span itemprop="name">杂</span></a>
+                  <a href="/categories/Unity/" itemprop="url" rel="index"><span itemprop="name">Unity</span></a>
                 </span>
             </span>
 
@@ -212,7 +208,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>178</span>
+              <span>907</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -231,9 +227,22 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>我的jetbrain证书已经失效了很久，上个学期比较忙没有时间搭理它，有应急时刻都是直接在网上找到别人的激活代码上一贴，不过一般一两个小时就失效了…，今天感觉不能这样了，所以就认真查了一下怎么重新激活证书。  </p>
-<p>然后我发现你可以在这个<a target="_blank" rel="noopener" href="https://www.jetbrains.com/zh-cn/community/education/#students">网站</a>上申请证书，没错，只要你是学生就可以申请了，貌似只要是.edu.cn后缀的邮箱它都认。所以以后不要搞什么破解了<span class="github-emoji" style="color: transparent;background:no-repeat url(https://github.githubassets.com/images/icons/emoji/unicode/1f604.png?v8) center/contain" data-src="https://github.githubassets.com/images/icons/emoji/unicode/1f604.png?v8">😄</span></p>
-<p><img src="/2020/08/15/jetbrain%20License%E6%9B%B4%E6%96%B0/jetbrain.png" alt="image">  </p>
+        <h2 id="MMD模型导入Unity"><a href="#MMD模型导入Unity" class="headerlink" title="MMD模型导入Unity"></a>MMD模型导入Unity</h2><p>好一段时间没有更新过博客了，并不是忙，最近因为疫情原因在国外被关了一年，人生地不熟，快憋出抑郁症了，干什么都没动力，希望这种情况能赶快过去吧。</p>
+<p>众所周知，MMD模型是pmx格式的，然而Unity却不直接支持这种格式，我找到了两种方法将MMD模型导入到Unity中，一种是使用Unity插件进行自动转化，还有一种较麻烦需要使用blender进行中介来转换。  </p>
+<a id="more"></a>
+
+<h4 id="MMD4Mecanim"><a href="#MMD4Mecanim" class="headerlink" title="MMD4Mecanim"></a>MMD4Mecanim</h4><p>该插件运行在Unity上可以自动的将PMX格式模型转换为MMD模型，除此之外它看起来还有一些功能，但这次先不探索了，首先在该<a target="_blank" rel="noopener" href="http://stereoarts.jp/">网站</a>中下载插件。  </p>
+<p><img src="/2020/12/06/MMD%E6%A8%A1%E5%9E%8B%E5%AF%BC%E5%85%A5Unity/MMD%E6%8F%92%E4%BB%B6%E7%BD%91%E5%9D%80.png" alt="image"></p>
+<p>然后在Unity项目导入资源，可以选择在Assets菜单中的Import Package中导入该资源，或者直接在Unity编辑器外直接点击该包导入资源，需要注意的是2018.4后版本都需要对插件进行升级，我这里使用的是2019.3版本的编辑器，进行了自动升级后没有什么问题。  </p>
+<p>然后就可以将包含有MMD模型的文件夹拖入Asset文件夹，这时插件会自动对模型进行一些转换，将pmx文件转换为[modelName].MMD4Mecanim.asset  </p>
+<p><img src="/2020/12/06/MMD%E6%A8%A1%E5%9E%8B%E5%AF%BC%E5%85%A5Unity/MMD%E6%8F%92%E4%BB%B6%E8%BD%AC%E5%8C%96.png" alt="image">  </p>
+<p>点击asset文件后会在inspector面板让你了解版权的一些问题，然后点同意。</p>
+<p><img src="/2020/12/06/MMD%E6%A8%A1%E5%9E%8B%E5%AF%BC%E5%85%A5Unity/MMD%E6%8F%92%E4%BB%B6%E8%BD%AC%E5%8C%96%E7%95%8C%E9%9D%A2.png" alt="image">  </p>
+<p>在该界面中可以看到还有一个Advanced mod，带进去后可以看到很多选项，这些选项可以更好的自定义转换过程，这里我还是直接进行了普通的转换。转换后会在模型文件夹里生成fbx文件和一些附带的材质球，简单地看了一下转换效果，材质球都被换成了该插件自己的shader，我觉得这些shader应该是默认模型是日漫/二次元画风的模型，导入的模型在光影效果下看起来还算正常，但是要实现更和谐的渲染效果还是得自己改shader。  </p>
+<p>如果你要给你的转换出的模型套上动画需要在Rig标签页中把Animation Type换成Humanoid。这里我有个之前不知道的小技巧，把动画控制器直接拖到物件面板上系统会自动给你添加动画组件，很方便。  </p>
+<p><img src="/2020/12/06/MMD%E6%A8%A1%E5%9E%8B%E5%AF%BC%E5%85%A5Unity/MMD%E6%8F%92%E4%BB%B6%E5%8A%A8%E7%94%BB.png" alt="image">  </p>
+<p>参考网址 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/marisa/p/4298949.html">https://www.cnblogs.com/marisa/p/4298949.html</a>  </p>
+<h4 id="Blender转化"><a href="#Blender转化" class="headerlink" title="Blender转化"></a>Blender转化</h4><p>有空再写，这个挺麻烦的</p>
 <script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
@@ -261,8 +270,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/IDE/" rel="tag"># IDE</a>
-              <a href="/tags/JetBrain/" rel="tag"># JetBrain</a>
+              <a href="/tags/Unity/" rel="tag"># Unity</a>
           </div>
 
         
@@ -271,13 +279,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/08/13/%E5%88%9B%E5%BB%BA%E4%BD%A0%E7%9A%84%E5%8D%9A%E5%AE%A2/" rel="prev" title="创建你的博客">
-      <i class="fa fa-chevron-left"></i> 创建你的博客
+    <a href="/2020/09/08/%E4%BA%BA%E7%89%A9%E8%A7%86%E7%BA%BF%E9%9A%8F%E9%BC%A0%E6%A0%87%E7%A7%BB%E5%8A%A8%E6%8E%A2%E7%A9%B6/" rel="prev" title="人物视线随鼠标移动探究">
+      <i class="fa fa-chevron-left"></i> 人物视线随鼠标移动探究
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/09/07/%E8%AE%A1%E7%BB%84%E9%9A%BE%E7%82%B9%E7%AC%AC%E4%BA%8C%E7%AB%A0/" rel="next" title="计组难点第二章">
-      计组难点第二章 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -336,6 +341,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#MMD%E6%A8%A1%E5%9E%8B%E5%AF%BC%E5%85%A5Unity"><span class="nav-number">1.</span> <span class="nav-text">MMD模型导入Unity</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MMD4Mecanim"><span class="nav-number">1.0.1.</span> <span class="nav-text">MMD4Mecanim</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Blender%E8%BD%AC%E5%8C%96"><span class="nav-number">1.0.2.</span> <span class="nav-text">Blender转化</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
